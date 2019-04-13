@@ -1,0 +1,12 @@
+categories:
+- media
+- usenet
+questions:
+- variable: ingress.enabled
+  default: "false"
+  description: "Enable ingress for nzbget"
+  type: boolean
+  required: false
+  label: Nzbget Ingress Enabled
+  show_subquestion_if: true
+  group: "nzbget settings"
