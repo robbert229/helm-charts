@@ -9,4 +9,10 @@ questions:
   required: false
   label: Nzbget Ingress Enabled
   show_subquestion_if: true
-  group: "nzbget settings"
+  group: "ingress"
+  subquestions:
+  - variable: ingress.hosts[0]
+    description: "the host name to expose nzbget on"
+    required: true
+    type: "hostname"
+    label: "Hostname"
