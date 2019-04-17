@@ -44,7 +44,7 @@ nzbget:
         path: /mnt/slow/smb-shares/common/
         server: freenas.lab.johnrowley.co
     
-    - name: ptmp
+    - name: nzbget
       iscsi:
         targetPortal: 192.168.100.15:3260
         portals: ['192.168.100.15:3260']
@@ -58,7 +58,7 @@ nzbget:
       name: config
     - mountPath: /mnt/z/
       name: zdrive
-    - mountPath: /mnt/ptmp
-      name: ptmp
+    - mountPath: /mnt/nzbget
+      name: nzbget
 
 nzbget:
