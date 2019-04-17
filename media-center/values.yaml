@@ -61,4 +61,8 @@ nzbget:
     - mountPath: /mnt/nzbget
       name: nzbget
 
-nzbget:
+radarr:
+  ingress:
+    enabled: true
+    hosts: 
+    - radarr.k8s.lab.johnrowley.co
