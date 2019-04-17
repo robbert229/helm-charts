@@ -1,6 +1,7 @@
 nzbget:
   ingress:
     enabled: true
+    tls: []
     hosts: 
     - nzbget.k8s.lab.johnrowley.co
   
