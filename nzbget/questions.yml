@@ -1,0 +1,18 @@
+categories:
+- media
+- usenet
+questions:
+- variable: ingress.enabled
+  default: "false"
+  description: "Enable ingress for nzbget"
+  type: boolean
+  required: false
+  label: Nzbget Ingress Enabled
+  show_subquestion_if: true
+  group: "ingress"
+  subquestions:
+  - variable: ingress.hosts[0]
+    description: "the host name to expose nzbget on"
+    required: true
+    type: "hostname"
+    label: "Hostname"
