@@ -1,5 +1,5 @@
 {{- if .Values.nzbget.ingress.enabled -}}
-{{- $fullName := include "nzbget.fullname" . -}}
+{{- $fullName := include "mediacenter.fullname" . -}}
 {{- $ingressPath := .Values.nzbget.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
