@@ -6,8 +6,8 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    app.kubernetes.io/name: {{ include "nzbget.name" . }}
-    helm.sh/chart: {{ include "nzbget.chart" . }}
+    app.kubernetes.io/name: {{ include "mediacenter.name" . }}
+    helm.sh/chart: {{ include "mediacenter.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- with .Values.nzbget.ingress.annotations }}
