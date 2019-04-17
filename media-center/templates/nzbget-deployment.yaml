@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mediacenter.fullname" . }}-nzbget
+  labels:
+    app.kubernetes.io/name: {{ include "mediacenter.name" . }}
+    helm.sh/chart: {{ include "mediacenter.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    component: nzbget
+spec:
+  replicas: 1
+  strategy:
+    type: {{ .Values.nzbget.strategyType }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "mediacenter.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      component: nzbget
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "mediacenter.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        component: nzbget
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.nzbget.image.repository }}:{{ .Values.nzbget.image.tag }}"
+          imagePullPolicy: {{ .Values.nzbget.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 6789
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: http
+          readinessProbe:
+            tcpSocket:
+              port: http
+          env:
+            - name: TZ
+              value: "{{ .Values.nzbget.timezone }}"
+            - name: PUID
+              value: "{{ .Values.nzbget.puid }}"
+            - name: PGID
+              value: "{{ .Values.nzbget.pgid }}"
+          volumeMounts:
+{{ toYaml .Values.nzbget.volumeMounts | indent 12 }}
+          resources:
+{{ toYaml .Values.nzbget.resources | indent 12 }}
+      volumes:
+{{ toYaml .Values.nzbget.volumes | indent 8 }}
+    {{- with .Values.nzbget.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.nzbget.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.nzbget.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

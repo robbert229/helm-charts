@@ -1,0 +1,64 @@
+nzbget:
+  ingress:
+    enabled: true
+    hosts: 
+    - nzbget.k8s.lab.johnrowley.co
+  
+  image:
+    repository: linuxserver/nzbget
+    tag: amd64-v21.0-r2302-ls9
+    pullPolicy: IfNotPresent
+
+  strategyType: Recreate
+
+  nameOverride: ""
+  fullnameOverride: ""
+
+  timezone: UTC
+
+  service:
+    type: ClusterIP
+    port: 6789
+    annotations: {}
+    labels: {}
+    loadBalancerIP:
+
+  resources: {}
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  puid: 0
+  pgid: 0
+
+  volumes:
+    - name: config
+      persistentVolumeClaim:
+        claimName: nzbget-config
+
+    - name: zdrive
+      nfs:
+        path: /mnt/slow/smb-shares/common/
+        server: freenas.lab.johnrowley.co
+    
+    - name: ptmp
+      iscsi:
+        targetPortal: 192.168.100.15:3260
+        portals: ['192.168.100.15:3260']
+        iqn: iqn.2005-10.org.freenas.ctl:nzbget
+        lun: 0
+        fsType: ext4
+        readOnly: false
+  
+  volumeMounts:
+    - mountPath: /config
+      name: config
+    - mountPath: /mnt/z/
+      name: zdrive
+    - mountPath: /mnt/ptmp
+      name: ptmp
+
+nzbget:
