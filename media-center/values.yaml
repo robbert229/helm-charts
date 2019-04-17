@@ -61,7 +61,7 @@ nzbget:
       name: nzbget
       subPath: config
 
-    - mountPAth: /mnt/base-nzbget
+    - mountPath: /mnt/base-nzbget
       name: nzbget
 radarr:
   ingress:
