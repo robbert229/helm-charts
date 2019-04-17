@@ -24,7 +24,6 @@ nzbget:
     port: 6789
     annotations: {}
     labels: {}
-    loadBalancerIP:
 
   resources: {}
 
