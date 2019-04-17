@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "mediacenter.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "mediacenter.name" . }}
+    helm.sh/chart: {{ include "mediacenter.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    component: nzbget
+{{- if .Values.nzbget.service.labels }}
+{{ toYaml .Values.nzbget.service.labels | indent 4 }}
+{{- end }}
+{{- with .Values.nzbget.service.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+{{- if (or (eq .Values.nzbget.service.type "ClusterIP") (empty .Values.nzbget.service.type)) }}
+  type: ClusterIP
+  {{- if .Values.nzbget.service.clusterIP }}
+  clusterIP: {{ .Values.nzbget.service.clusterIP }}
+  {{end}}
+{{- else if eq .Values.nzbget.service.type "LoadBalancer" }}
+  type: {{ .Values.nzbget.service.type }}
+  {{- if .Values.nzbget.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.nzbget.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.nzbget.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+{{ toYaml .Values.nzbget.service.loadBalancerSourceRanges | indent 4 }}
+  {{- end -}}
+{{- else }}
+  type: {{ .Values.nzbget.service.type }}
+{{- end }}
+{{- if .Values.nzbget.service.externalIPs }}
+  externalIPs:
+{{ toYaml .Values.nzbget.service.externalIPs | indent 4 }}
+{{- end }}
+  {{- if .Values.nzbget.service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.nzbget.service.externalTrafficPolicy }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.nzbget.service.port }}
+      protocol: TCP
+      targetPort: http
+{{ if (and (eq .Values.nzbget.service.type "NodePort") (not (empty .Values.nzbget.service.nodePort))) }}
+      nodePort: {{.Values.nzbget.service.nodePort}}
+{{ end }}
+  selector:
+    app.kubernetes.io/name: {{ include "mediacenter.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    component: nzbget
+    
