@@ -35,10 +35,6 @@ nzbget:
   pgid: 0
 
   volumes:
-    - name: config
-      persistentVolumeClaim:
-        claimName: nzbget-config
-
     - name: zdrive
       nfs:
         path: /mnt/slow/smb-shares/common/
@@ -54,12 +50,16 @@ nzbget:
         readOnly: false
   
   volumeMounts:
-    - mountPath: /config
-      name: config
     - mountPath: /mnt/z/
       name: zdrive
+    
     - mountPath: /mnt/nzbget
       name: nzbget
+      subpath: data
+    
+    - mountPath: /config
+      name: nzbget
+      subpath: config
 
 radarr:
   ingress:
