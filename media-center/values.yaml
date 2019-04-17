@@ -55,12 +55,14 @@ nzbget:
     
     - mountPath: /mnt/nzbget
       name: nzbget
-      subpath: data
+      subPath: data
     
     - mountPath: /config
       name: nzbget
-      subpath: config
+      subPath: config
 
+    - mountPAth: /mnt/base-nzbget
+      name: nzbget
 radarr:
   ingress:
     enabled: true
