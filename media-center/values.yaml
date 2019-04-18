@@ -133,9 +133,9 @@ lidarr:
     enabled: true
     tls: 
     - hosts:
-      - radarr.k8s.lab.johnrowley.co
+      - lidarr.k8s.lab.johnrowley.co
     hosts: 
-    - radarr.k8s.lab.johnrowley.co
+    - lidarr.k8s.lab.johnrowley.co
     path: /
 
   replicaCount: 1
