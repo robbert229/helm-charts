@@ -1,0 +1,39 @@
+{{- if .Values.lidarr.ingress.enabled -}}
+{{- $fullName := include "mediacenter.fullname" . -}}
+{{- $ingressPath := .Values.lidarr.ingress.path -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-lidarr
+  labels:
+    app: {{ template "mediacenter.name" . }}
+    chart: {{ template "mediacenter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: lidarr
+{{- with .Values.lidarr.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+{{- if .Values.lidarr.ingress.tls }}
+  tls:
+  {{- range .Values.lidarr.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . }}
+      {{- end }}
+      secretName: {{ .secretName }}
+  {{- end }}
+{{- end }}
+  rules:
+  {{- range .Values.lidarr.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $fullName }}-lidarr
+              servicePort: http
+  {{- end }}
+{{- end }}

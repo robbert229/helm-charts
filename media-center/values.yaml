@@ -127,3 +127,65 @@ radarr:
   tolerations: []
 
   affinity: {}
+
+lidarr:
+  ingress:
+    enabled: true
+    tls: 
+    - hosts:
+      - radarr.k8s.lab.johnrowley.co
+    hosts: 
+    - radarr.k8s.lab.johnrowley.co
+    path: /
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/lidarr
+    tag: amd64-0.6.1.830-ls10
+    pullPolicy: IfNotPresent
+
+  env:
+    - name: PUID
+      value: "0"
+    - name: PGID
+      value: "0"
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  volumes:
+    - name: zdrive
+      nfs:
+        path: /mnt/slow/smb-shares/common/
+        server: freenas.lab.johnrowley.co
+    
+    - name: lidarr
+      iscsi:
+        targetPortal: 192.168.100.15:3260
+        portals: ['192.168.100.15:3260']
+        iqn: iqn.2005-10.org.freenas.ctl:lidarr
+        lun: 0
+        fsType: ext4
+        readOnly: false
+
+  volumeMounts:
+    - name: lidarr
+      mountPath: "/config"
+    - name: zdrive
+      mountPath: "/mnt/z/"
+
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 0.1
+    limits:
+      memory: 256Mi
+      cpu: 0.5
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}

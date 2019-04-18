@@ -1,0 +1,52 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "mediacenter.fullname" . }}-lidarr
+  labels:
+    app: {{ template "mediacenter.name" . }}
+    chart: {{ template "mediacenter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: lidarr
+spec:
+  replicas: {{ .Values.lidarr.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "mediacenter.name" . }}
+      release: {{ .Release.Name }}
+      component: lidarr
+  template:
+    metadata:
+      labels:
+        app: {{ template "mediacenter.name" . }}
+        release: {{ .Release.Name }}
+        component: lidarr
+    spec:
+      volumes:
+{{ toYaml .Values.lidarr.volumes | indent 6 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.lidarr.image.repository }}:{{ .Values.lidarr.image.tag }}"
+          imagePullPolicy: {{ .Values.lidarr.image.pullPolicy }}
+          env:
+{{ toYaml .Values.lidarr.env | indent 12 }}
+          ports:
+            - name: http
+              containerPort: 8686
+              protocol: TCP
+          volumeMounts:
+{{ toYaml .Values.lidarr.volumeMounts | indent 12 }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.lidarr.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.lidarr.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.lidarr.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
