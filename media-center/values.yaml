@@ -65,8 +65,65 @@ nzbget:
 
     - mountPath: /mnt/base-nzbget
       name: nzbget
+
 radarr:
   ingress:
     enabled: true
+    tls: 
+    - hosts:
+      - radarr.k8s.lab.johnrowley.co
     hosts: 
     - radarr.k8s.lab.johnrowley.co
+    path: /
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/radarr
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  env:
+    - name: PUID
+      value: "0"
+    - name: PGID
+      value: "0"
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  volumes:
+    - name: zdrive
+      nfs:
+        path: /mnt/slow/smb-shares/common/
+        server: freenas.lab.johnrowley.co
+    
+    - name: radarr
+      iscsi:
+        targetPortal: 192.168.100.15:3260
+        portals: ['192.168.100.15:3260']
+        iqn: iqn.2005-10.org.freenas.ctl:radarr
+        lun: 0
+        fsType: ext4
+        readOnly: false
+
+  volumeMounts:
+    - name: radarr
+      mountPath: "/config"
+    - name: zdrive
+      mountPath: "/mnt/z/"
+
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 0.1
+    limits:
+      memory: 256Mi
+      cpu: 0.5
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}

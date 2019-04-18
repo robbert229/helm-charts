@@ -1,0 +1,55 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "mediacenter.fullname" . }}
+  labels:
+    app: {{ template "mediacenter.name" . }}
+    chart: {{ template "mediacenter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.radarr.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "mediacenter.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "mediacenter.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      volumes:
+{{ toYaml .Values.radarr.volumes | indent 6 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.radarr.image.repository }}:{{ .Values.radarr.image.tag }}"
+          imagePullPolicy: {{ .Values.radarr.image.pullPolicy }}
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 7878
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 3
+          env:
+{{ toYaml .Values.radarr.env | indent 12 }}
+          ports:
+            - name: http
+              containerPort: 7878
+              protocol: TCP
+          volumeMounts:
+{{ toYaml .Values.radarr.volumeMounts | indent 12 }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.radarr.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.radarr.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.radarr.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
