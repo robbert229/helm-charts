@@ -1,0 +1,39 @@
+{{- if .Values.radarr.ingress.enabled -}}
+{{- $fullName := include "mediacenter.fullname" . -}}
+{{- $ingressPath := .Values.radarr.ingress.path -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-radarr
+  labels:
+    app: {{ template "mediacenter.name" . }}
+    chart: {{ template "mediacenter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: radarr
+{{- with .Values.radarr.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+{{- if .Values.radarr.ingress.tls }}
+  tls:
+  {{- range .Values.radarr.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . }}
+      {{- end }}
+      secretName: {{ .secretName }}
+  {{- end }}
+{{- end }}
+  rules:
+  {{- range .Values.radarr.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $fullName }}-radarr
+              servicePort: http
+  {{- end }}
+{{- end }}
