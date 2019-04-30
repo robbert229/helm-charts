@@ -189,3 +189,65 @@ lidarr:
   tolerations: []
 
   affinity: {}
+
+sonarr:
+  ingress:
+    enabled: true
+    tls: 
+    - hosts:
+      - sonarr.k8s.lab.johnrowley.co
+    hosts: 
+    - sonarr.k8s.lab.johnrowley.co
+    path: /
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/sonarr
+    tag: amd64-3.0.1.467-ls62
+    pullPolicy: IfNotPresent
+
+  env:
+    - name: PUID
+      value: "0"
+    - name: PGID
+      value: "0"
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  volumes:
+    - name: zdrive
+      nfs:
+        path: /mnt/slow/smb-shares/common/
+        server: freenas.lab.johnrowley.co
+    
+    - name: sonarr
+      iscsi:
+        targetPortal: 192.168.100.15:3260
+        portals: ['192.168.100.15:3260']
+        iqn: iqn.2005-10.org.freenas.ctl:sonarr
+        lun: 0
+        fsType: ext4
+        readOnly: false
+
+  volumeMounts:
+    - name: sonarr
+      mountPath: "/config"
+    - name: zdrive
+      mountPath: "/mnt/z/"
+
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 0.1
+    limits:
+      memory: 256Mi
+      cpu: 0.5
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}

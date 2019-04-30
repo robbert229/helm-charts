@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "mediacenter.fullname" . }}-sonarr
+  labels:
+    app: {{ template "mediacenter.name" . }}
+    chart: {{ template "mediacenter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: sonarr
+spec:
+  type: {{ .Values.sonarr.service.type }}
+  ports:
+    - port: {{ .Values.sonarr.service.port }}
+      targetPort: 8989
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "mediacenter.name" . }}
+    release: {{ .Release.Name }}
+    component: sonarr

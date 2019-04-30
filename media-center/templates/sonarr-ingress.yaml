@@ -1,0 +1,39 @@
+{{- if .Values.sonarr.ingress.enabled -}}
+{{- $fullName := include "mediacenter.fullname" . -}}
+{{- $ingressPath := .Values.sonarr.ingress.path -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-sonarr
+  labels:
+    app: {{ template "mediacenter.name" . }}
+    chart: {{ template "mediacenter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: sonarr
+{{- with .Values.sonarr.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+{{- if .Values.sonarr.ingress.tls }}
+  tls:
+  {{- range .Values.sonarr.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . }}
+      {{- end }}
+      secretName: {{ .secretName }}
+  {{- end }}
+{{- end }}
+  rules:
+  {{- range .Values.sonarr.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $fullName }}-sonarr
+              servicePort: http
+  {{- end }}
+{{- end }}
