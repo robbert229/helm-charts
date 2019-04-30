@@ -13,7 +13,7 @@ metadata:
     component: nzbget
 {{- with .Values.nzbget.ingress.annotations }}
   annotations:
-     ingress.kubernetes.io/proxy-body-size: "0"
+     nginx.ingress.kubernetes.io/proxy-body-size: "0"
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
