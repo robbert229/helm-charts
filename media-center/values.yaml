@@ -39,7 +39,7 @@ nzbget:
   volumes:
     - name: zdrive
       nfs:
-        path: /mnt/slow/smb-shares/common/
+        path: /mnt/nondurable/media/
         server: freenas.lab.johnrowley.co
     
     - name: nzbget
@@ -96,7 +96,7 @@ radarr:
   volumes:
     - name: zdrive
       nfs:
-        path: /mnt/slow/smb-shares/common/
+        path: /mnt/nondurable/media/
         server: freenas.lab.johnrowley.co
     
     - name: radarr
@@ -158,7 +158,7 @@ lidarr:
   volumes:
     - name: zdrive
       nfs:
-        path: /mnt/slow/smb-shares/common/
+        path: /mnt/nondurable/media/
         server: freenas.lab.johnrowley.co
     
     - name: lidarr
@@ -220,7 +220,7 @@ sonarr:
   volumes:
     - name: zdrive
       nfs:
-        path: /mnt/slow/smb-shares/common/
+        path: /mnt/nondurable/media/
         server: freenas.lab.johnrowley.co
     
     - name: sonarr
