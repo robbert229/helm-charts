@@ -113,3 +113,8 @@ spec:
 {{- end }}
       volumes:
         - name: config
+          configMap:
+            name: {{ include "pgbouncer.fullname" . }}
+        - name: secret
+          secret:
+            secretName: {{ include "pgbouncer.fullname" . }}
