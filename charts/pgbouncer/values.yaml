@@ -99,7 +99,7 @@ secretEnvs:
   # -- you can use this to set ignore_startup_parameters in the auto-generated pgbouncer.ini. This can be useful for solving certain connection issues. See https://www.pgbouncer.org/ config.html for more details.
   PGBOUNCER_IGNORE_STARTUP_PARAMETERS: ""
   # -- PgBouncer maximum time in seconds a server connection can be idle. If 0 then the timeout is disabled. Default: 600
-  PGBOUNCER_SERVER_IDLE_TIMEOUT: 
+  PGBOUNCER_SERVER_IDLE_TIMEOUT: ""
   # -- PgBouncer query sent to server on connection release before making it available to other clients. Default: DISCARD ALL
   PGBOUNCER_SERVER_RESET_QUERY: "DISCARD ALL"
   # -- PgBouncer comma-separated list of database users that are allowed to connect and run read-only queries. No defaults.
