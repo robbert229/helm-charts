@@ -19,6 +19,24 @@ entries:
   pgbouncer:
   - apiVersion: v2
     appVersion: 1.20.1
+    created: "2023-10-10T07:17:37.301399537Z"
+    description: PgBouncer - lightweight connection pooler for PostgreSQL
+    digest: c7271f98f27f9386ddb0f7c96da16608614840004fb64f4671faa3312d650a83
+    home: https://pgbouncer.github.io/
+    icon: https://www.postgresql.org/media/img/about/press/elephant.png
+    keywords:
+    - postgresql
+    - pgbouncer
+    maintainers:
+    - email: johnrowleyster@gmail.com
+      name: John Rowley
+      url: https://github.com/robbert229/
+    name: pgbouncer
+    urls:
+    - https://github.com/robbert229/helm-charts/releases/download/pgbouncer-1.0.0-1/pgbouncer-1.0.0-1.tgz
+    version: 1.0.0-1
+  - apiVersion: v2
+    appVersion: 1.20.1
     created: "2023-10-10T07:10:49.035686745Z"
     description: PgBouncer - lightweight connection pooler for PostgreSQL
     digest: d9fc3f6b72cd9f40dd45bed6da0ac4a8ca8becff30a84cd18df6230772d3bb60
@@ -71,4 +89,4 @@ entries:
     urls:
     - https://github.com/robbert229/helm-charts/releases/download/pgbouncer-0.0.2/pgbouncer-0.0.2.tgz
     version: 0.0.2
-generated: "2023-10-10T07:10:49.035704945Z"
+generated: "2023-10-10T07:17:37.301416038Z"
