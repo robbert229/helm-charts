@@ -58,11 +58,6 @@ spec:
         - name: pgbouncer
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command:
-            - pgbouncer
-            - -u
-            - pgbouncer
-            - /etc/pgbouncer/pgbouncer.ini
           env:
             {{- include "pgbouncer.environment" . | nindent 12 }}
           ports:
@@ -74,15 +69,6 @@ spec:
           readinessProbe:
             tcpSocket:
               port: {{ .Values.service.internalPort }}
-          volumeMounts:
-            - name: secret
-              subPath: userlist.txt
-              mountPath: /etc/pgbouncer/userlist.txt
-              readOnly: true
-            - name: secret
-              subPath: pgbouncer.ini
-              mountPath: /etc/pgbouncer/pgbouncer.ini
-              readOnly: true
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 {{- if .Values.metrics.enabled }}
@@ -111,10 +97,3 @@ spec:
           resources:
             {{- toYaml .Values.metrics.resources | nindent 12 }}
 {{- end }}
-      volumes:
-        - name: config
-          configMap:
-            name: {{ include "pgbouncer.fullname" . }}
-        - name: secret
-          secret:
-            secretName: {{ include "pgbouncer.fullname" . }}
