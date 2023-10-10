@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pgbouncer.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "pgbouncer.name" . }}
+    helm.sh/chart: {{ include "pgbouncer.chart" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    component: pgbouncer
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: {{ .Values.service.name }}
+      port: {{ .Values.service.externalPort }}
+      targetPort: {{ .Values.service.name }}
+      protocol: TCP
+{{ if .Values.metrics.enabled }}
+    - name: metrics
+      port: 9127
+      targetPort: 9127
+      protocol: TCP
+{{ end }}
+  selector:
+    app.kubernetes.io/name: {{ include "pgbouncer.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    component: pgbouncer
+---

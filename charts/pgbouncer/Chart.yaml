@@ -1,0 +1,15 @@
+apiVersion: v2
+name: pgbouncer
+version: 0.0.1
+appVersion: 1.20.1
+description: PgBouncer - lightweight connection pooler for PostgreSQL
+keywords:
+- postgresql
+- pgbouncer
+home: https://pgbouncer.github.io/
+icon: https://www.postgresql.org/media/img/about/press/elephant.png
+engine: gotpl
+maintainers:
+  - name: John Rowley
+    email: johnrowleyster@gmail.com
+    url: https://github.com/robbert229/

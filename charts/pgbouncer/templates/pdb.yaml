@@ -1,0 +1,17 @@
+{{- if .Values.budget.minAvailable -}}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: "{{ include "pgbouncer.fullname" . }}"
+  labels:
+    app.kubernetes.io/name: {{ include "pgbouncer.name" . }}
+    helm.sh/chart: {{ include "pgbouncer.chart" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "pgbouncer.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  minAvailable: {{ .Values.budget.minAvailable }}
+{{- end -}}
